@@ -6,7 +6,7 @@ const ThemeSwitch = (props: SwitchProps) => {
   const {
     Component,
     slots,
-    isSelected, // isSelected will determine if the switch is on or off
+    isSelected, 
     getBaseProps,
     getInputProps,
     getWrapperProps,
@@ -22,13 +22,13 @@ const ThemeSwitch = (props: SwitchProps) => {
           {...getWrapperProps()}
           className={slots.wrapper({
             class: [
-              "w-8 h-8", // Adjust the size
+              "w-8 h-8",  /* prepei na to ftiakse */
               "flex items-center justify-center",
-              "rounded-lg bg-default-100 hover:bg-default-200", // Add some hover effect
+              "rounded-lg bg-default-100 hover:bg-default-200", 
             ],
           })}
         >
-          {isSelected ? <SunIcon /> : <MoonIcon />} {/* Switch between Sun and Moon */}
+          {isSelected ? <SunIcon /> : <MoonIcon />} 
         </div>
       </Component>
     </div>

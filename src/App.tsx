@@ -31,17 +31,17 @@ import LanguageIcon from "../src/assets/lang.svg";
 import AboutUs from "../src/assets/about.svg";
 
 interface Section {
-  possibleValues?: string[];  // Possible values for radio buttons (optional now)
-  selectedValue: string | null;  // Store the selected value (radio or text input)
-  isTextField?: boolean;  // If true, this section will have a text input instead of radio buttons
+  possibleValues?: string[];
+  selectedValue: string | null;
+  isTextField?: boolean;
 }
 
 interface Indicator {
   label: string;
   weight: number;
   formulaType: string;
-  sections: Section[]; // Each indicator can have multiple sections
-  textField?: string;  // Optional text field for additional comments or information
+  sections: Section[];
+  textField?: string;
 }
 
 interface SDG {
@@ -49,8 +49,6 @@ interface SDG {
   indicators: Indicator[];
 }
 
-
-// Example SDG Data with different sections and possible values for each indicator
 const sdgData: SDG[] = [
   {
     name: "SDG 01",
@@ -85,9 +83,9 @@ const sdgData: SDG[] = [
         weight: 0.125,
         formulaType: "poverty",
         sections: [
-          { possibleValues: ["0", "0.25", "1"], selectedValue: null },  // Radio buttons
-          { isTextField: true, selectedValue: null },  // Text field input
-          { possibleValues: ["0", "1"], selectedValue: null },  // Radio buttons
+          { possibleValues: ["0", "0.25", "1"], selectedValue: null },
+          { isTextField: true, selectedValue: null },
+          { possibleValues: ["0", "1"], selectedValue: null },
         ],
       },
     ],
@@ -103,7 +101,6 @@ const sdgData: SDG[] = [
       },
     ],
   },
-  // Add more SDGs and their indicators as needed...
 ];
 
 const App = () => {
@@ -124,29 +121,22 @@ const App = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    // Update the indicators when the current page changes
     setIndicators(sdgDataState[currentSDGPage - 1].indicators);
   }, [currentSDGPage, sdgDataState]);
 
-  // Handle pagination for SDGs
   const handlePageChange = (page: number) => {
     setCurrentSDGPage(page);
   };
 
-  
-
   const updateIndicatorSection = (indicatorIndex: number, sectionIndex: number, value: string) => {
     const updatedIndicators = [...indicators];
     updatedIndicators[indicatorIndex].sections[sectionIndex].selectedValue = value;
-  
+
     setIndicators(updatedIndicators);
-  
-    // Καλεί την helper function για να δει αν πρέπει να προχωρήσει
+
     checkAndNavigateNextPage(updatedIndicators);
   };
-  
 
-// Helper to check if all indicators in the current page are filled and if there is no text field
 const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
   const allFilled = updatedIndicators.every(indicator =>
     indicator.sections.every(section => section.selectedValue !== null)
@@ -156,9 +146,7 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
     indicator.sections.some(section => section.isTextField)
   );
 
-  // Αν έχουν συμπληρωθεί όλα τα πεδία και ΔΕΝ υπάρχει text field
   if (allFilled && !hasTextField) {
-    // Έλεγχος αν η σελίδα έχει ήδη γίνει πράσινη (δηλαδή ολοκληρωμένη)
     const isAlreadyComplete = completedPages.includes(currentSDGPage);
     
     if (!isAlreadyComplete) {
@@ -166,17 +154,14 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
       newSDGDataState[currentSDGPage - 1].indicators = updatedIndicators;
       setSdgDataState(newSDGDataState);
 
-      // Προσθήκη της σελίδας στη λίστα των completed pages
       setCompletedPages([...completedPages, currentSDGPage]);
 
-      // Αυτόματο πέρασμα στην επόμενη σελίδα αν δεν είμαστε στην τελευταία
       if (currentSDGPage < sdgData.length) {
         setCurrentSDGPage(currentSDGPage + 1);
       }
     }
   }
 };
-
 
   const calculateScore = () => {
     setLoading(true);
@@ -196,7 +181,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
   };
 
   const handleRestart = () => {
-    // Reset all selected values in the state-based sdgDataState
     const resetSDGData = sdgDataState.map((sdg) => ({
       ...sdg,
       indicators: sdg.indicators.map((indicator) => ({
@@ -208,10 +192,9 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
       })),
     }));
 
-    // Update the state with the reset data
     setSdgDataState(resetSDGData);
-    setCurrentSDGPage(1); // Set to first page after reset
-    setResult(null); // Clear any previously calculated result
+    setCurrentSDGPage(1);
+    setResult(null);
   };
 
   const handleLanguageChange = (key: string) => {
@@ -269,7 +252,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
 
   return (
     <div className="relative flex min-h-screen">
-      {/* Background Video */}
       <video
         src={videoBg}
         autoPlay
@@ -278,9 +260,7 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
         className="absolute inset-0 w-full h-full object-cover -z-10 select-none"
       />
 
-      {/* Left side: Calculator */}
       <div ref={leftPanelRef} className="flex-1 p-8 relative z-10">
-        {/* Transparent Header */}
         <header className="fixed top-0 left-0 w-full bg-blue-900 bg-opacity-80 text-white p-6 shadow-lg flex justify-between items-center z-20 backdrop-blur-sm select-none">
           <div className="flex items-center space-x-4 select-none">
             <img
@@ -424,7 +404,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
           </nav>
         </header>
 
-        {/* Draggable Card */}
         <div
           ref={cardRef}
           style={{
@@ -438,8 +417,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
         >
           <Card className={`flex flex-col justify-between w-[500px] h-[700px] p-8 shadow-2xl rounded-lg mt-24 relative ${ isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black' } select-none ${ indicators.every(indicator => indicator.sections.every(section => section.selectedValue !== null) ) && currentSDGPage !== sdgData.length  ? 'border-2 border-green-300'  : ''}`}>
 
-
-            {/* Line icon for dragging */}
             <div
               className="absolute top-2 right-2 cursor-move select-none"
               onMouseDown={handleMouseDown}
@@ -452,7 +429,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
               />
             </div>
 
-            {/* Theme Switch (Right) */}
             <div className="absolute top-2 left-2 select-none">
               <ThemeSwitch
                 checked={isDarkMode}
@@ -460,12 +436,10 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
               />
             </div>
 
-            {/* SDG Title */}
             <h2 className="text-2xl font-extrabold text-center mb-8 tracking-wide">
               {sdgData[currentSDGPage - 1].name}
             </h2>
 
-            {/* Scrollable area for indicators */}
             <ScrollShadow size={100} className="w-full h-[400px] mb-4 overflow-y-scroll scrollbar-hide">
               {indicators.map((indicator, indicatorIndex) => (
                 <div key={indicatorIndex} className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
@@ -479,7 +453,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                         Section {sectionIndex + 1}
                       </h3>
 
-                      {/* Render Radio Buttons or Text Field based on isTextField */}
                       {section.isTextField ? (
                         <Input
                           size="lg"
@@ -518,7 +491,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
               ))}
             </ScrollShadow>
 
-            {/* Pagination and Button at the bottom */}
             <div className="flex flex-col items-center mt-auto space-y-4">
               <div className="select-none">
                 <Pagination
@@ -531,7 +503,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                 />
               </div>
 
-              {/* Conditionally render the Calculate button only if on the last page */}
               {currentSDGPage === sdgData.length && (
                 <Button
                   className="select-none py-2 px-4 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600"
@@ -542,8 +513,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                 </Button>
               )}
 
-
-              {/* Footer Section with small text and imported heart SVG */}
               <div className="text-center text-xs text-gray-500">
                 {language === "en" ? (
                   <>
@@ -567,12 +536,9 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
               </div>
             </div>
           </Card>
-
-
         </div>
       </div>
 
-      {/* Right side: Result */}
       <div
         className={`flex-1 flex items-center justify-center transition-all ${
           loading || result !== null ? "backdrop-blur-sm" : "bg-transparent"
@@ -589,7 +555,6 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
         ) : null}
       </div>
 
-      {/* Users section at the bottom right */}
       <div className="absolute bottom-5 right-5 flex flex-col space-y-4 z-20 select-none">
         <div className="opacity-20 hover:opacity-100 transition-opacity duration-300 select-none">
           <User
