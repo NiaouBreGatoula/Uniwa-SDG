@@ -83,7 +83,7 @@ const sdgData: SDG[] = [
         weight: 0.125,
         formulaType: "poverty",
         sections: [
-          { possibleValues: ["0","2", "0.25", "1"], selectedValue: null },
+          { possibleValues: ["0","1", "0.25", "1"], selectedValue: null },
           { isTextField: true, selectedValue: null },
           { possibleValues: ["0", "1"], selectedValue: null },
         ],
