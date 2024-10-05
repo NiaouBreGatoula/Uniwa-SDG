@@ -83,7 +83,7 @@ const sdgData: SDG[] = [
         weight: 0.125,
         formulaType: "poverty",
         sections: [
-          { possibleValues: ["0","1", "0.25", "1"], selectedValue: null },
+          { possibleValues: ["0", "1", "0.25", "1"], selectedValue: null },
           { isTextField: true, selectedValue: null },
           { possibleValues: ["0", "1"], selectedValue: null },
         ],
@@ -107,7 +107,9 @@ const App = () => {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
   const [sdgDataState, setSdgDataState] = useState<SDG[]>(sdgData);
   const [currentSDGPage, setCurrentSDGPage] = useState<number>(1);
-  const [indicators, setIndicators] = useState<Indicator[]>(sdgData[0].indicators);
+  const [indicators, setIndicators] = useState<Indicator[]>(
+    sdgData[0].indicators
+  );
   const [result, setResult] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [dragging, setDragging] = useState(false);
@@ -128,40 +130,45 @@ const App = () => {
     setCurrentSDGPage(page);
   };
 
-  const updateIndicatorSection = (indicatorIndex: number, sectionIndex: number, value: string) => {
+  const updateIndicatorSection = (
+    indicatorIndex: number,
+    sectionIndex: number,
+    value: string
+  ) => {
     const updatedIndicators = [...indicators];
-    updatedIndicators[indicatorIndex].sections[sectionIndex].selectedValue = value;
+    updatedIndicators[indicatorIndex].sections[sectionIndex].selectedValue =
+      value;
 
     setIndicators(updatedIndicators);
 
     checkAndNavigateNextPage(updatedIndicators);
   };
 
-const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
-  const allFilled = updatedIndicators.every(indicator =>
-    indicator.sections.every(section => section.selectedValue !== null)
-  );
+  const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
+    const allFilled = updatedIndicators.every((indicator) =>
+      indicator.sections.every((section) => section.selectedValue !== null)
+    );
 
-  const hasTextField = updatedIndicators.some(indicator =>
-    indicator.sections.some(section => section.isTextField)
-  );
+    const hasTextField = updatedIndicators.some((indicator) =>
+      indicator.sections.some((section) => section.isTextField)
+    );
 
-  if (allFilled && !hasTextField) {
-    const isAlreadyComplete = completedPages.includes(currentSDGPage);
-    
-    if (!isAlreadyComplete) {
-      const newSDGDataState = [...sdgDataState];
-      newSDGDataState[currentSDGPage - 1].indicators = updatedIndicators;
-      setSdgDataState(newSDGDataState);
+    if (allFilled && !hasTextField) {
+      const isAlreadyComplete = completedPages.includes(currentSDGPage);
 
-      setCompletedPages([...completedPages, currentSDGPage]);
+      if (!isAlreadyComplete) {
+        const newSDGDataState = [...sdgDataState];
+        newSDGDataState[currentSDGPage - 1].indicators = updatedIndicators;
+        setSdgDataState(newSDGDataState);
 
-      if (currentSDGPage < sdgData.length) {
-        setCurrentSDGPage(currentSDGPage + 1);
+        setCompletedPages([...completedPages, currentSDGPage]);
+
+        if (currentSDGPage < sdgData.length) {
+          setCurrentSDGPage(currentSDGPage + 1);
+        }
       }
     }
-  }
-};
+  };
 
   const calculateScore = () => {
     setLoading(true);
@@ -216,11 +223,16 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
       const cardHeight = cardRef.current.offsetHeight;
       const panelWidth = leftPanelRef.current.offsetWidth;
       const panelHeight = leftPanelRef.current.offsetHeight;
+  
+      const headerHeight = 100; 
+      const minY = headerHeight; 
+      const maxY = panelHeight - cardHeight;
       const centerX = (panelWidth - cardWidth) / 2;
-      const centerY = (panelHeight - cardHeight) / 2;
+      const centerY = Math.max(minY, Math.min((panelHeight - cardHeight) / 2, maxY));
       setPosition({ x: centerX, y: centerY });
     }
   }, []);
+  
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true);
@@ -232,19 +244,22 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
     if (dragging) {
       const deltaX = e.clientX - dragStartPos.x;
       const deltaY = e.clientY - dragStartPos.y;
-
+  
       if (cardRef.current && leftPanelRef.current) {
         const cardWidth = cardRef.current.offsetWidth;
         const cardHeight = cardRef.current.offsetHeight;
         const panelWidth = leftPanelRef.current.offsetWidth;
         const panelHeight = leftPanelRef.current.offsetHeight;
-        const newX = Math.max(0, Math.min(cardStartPos.x + deltaX, panelWidth - cardWidth));
-        const newY = Math.max(0, Math.min(cardStartPos.y + deltaY, panelHeight - cardHeight));
-
+        const headerHeight = 100; 
+        const minY = headerHeight; 
+        const maxY = panelHeight - cardHeight; 
+        const newX = Math.max(0,Math.min(cardStartPos.x + deltaX, panelWidth - cardWidth));
+        const newY = Math.max(minY, Math.min(cardStartPos.y + deltaY, maxY));
         setPosition({ x: newX, y: newY });
       }
     }
   };
+  
 
   const handleMouseUp = () => {
     setDragging(false);
@@ -303,7 +318,7 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                     alt="About Us"
                     className="inline-block mr-2 h-4 w-4 select-none"
                   />
-                  {language === "en" ? "About Us" : "Σχετικα με εμάς"}
+                  {language === "en" ? "About Us" : "Σχετικά με εμάς"}
                 </Button>
                 <Modal
                   backdrop="opaque"
@@ -325,30 +340,57 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                             <>
                               <p>
                                 <strong>This project was created by two students</strong>{" "}
-                                from the <strong>Department of Computer Science and Engineering at UniWA</strong>. It is part of
-                                the course <strong>"Educational Technology & Teaching of Informatics"</strong>.
+                                from the{" "}
+                                <strong>
+                                  Department of Computer Science and Engineering
+                                  at UniWA
+                                </strong>
+                                . It is part of the course{" "}
+                                <strong>
+                                  "Educational Technology & Teaching of
+                                  Informatics"
+                                </strong>
+                                .
                               </p>
                               <p>
-                                The main goal of the project is to develop a website that
-                                evaluates how well an educational institution integrates the{" "}
-                                <strong>Sustainable Development Goals (SDGs)</strong>. The
-                                website collects data, calculates scores, and provides a
-                                final weighted evaluation based on multiple indicators
-                                related to <strong>sustainability performance</strong>.
+                                The main goal of the project is to develop a
+                                website that evaluates how well an educational
+                                institution integrates the{" "}
+                                <strong>Sustainable Development Goals (SDGs)</strong>.
+                                The website collects data, calculates scores,
+                                and provides a final weighted evaluation based
+                                on multiple indicators related to{" "}
+                                <strong>sustainability performance</strong>.
                               </p>
                             </>
                           ) : (
                             <>
                               <p>
-                                <strong>Αυτό το έργο δημιουργήθηκε από δύο φοιτητές</strong>{" "}
-                                του <strong>Τμήματος Μηχανικών Πληροφορικής και Υπολογιστών του Πανεπιστημίου Δυτικής Αττικής</strong>. 
-                                Είναι μέρος του μαθήματος <strong>"Εκπαιδευτική Τεχνολογία και Διδακτική της Πληροφορικής"</strong>.
+                                <strong>
+                                  Αυτό το έργο δημιουργήθηκε από δύο φοιτητές
+                                </strong>{" "}
+                                του{" "}
+                                <strong>
+                                  Τμήματος Μηχανικών Πληροφορικής και Υπολογιστών
+                                  του Πανεπιστημίου Δυτικής Αττικής
+                                </strong>
+                                . Είναι μέρος του μαθήματος{" "}
+                                <strong>
+                                  "Εκπαιδευτική Τεχνολογία και Διδακτική της
+                                  Πληροφορικής"
+                                </strong>
+                                .
                               </p>
                             </>
                           )}
                         </ModalBody>
                         <ModalFooter className="select-none">
-                          <Button color="danger" variant="light" onPress={onClose} className="select-none">
+                          <Button
+                            color="danger"
+                            variant="light"
+                            onPress={onClose}
+                            className="select-none"
+                          >
                             {language === "en" ? "Close" : "Κλείσιμο"}
                           </Button>
                         </ModalFooter>
@@ -405,17 +447,27 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
         </header>
 
         <div
-          ref={cardRef}
-          style={{
-            position: "absolute",
-            left: `${position.x}px`,
-            top: `${position.y}px`,
-            cursor: dragging ? "grabbing" : "default",
-            transition: dragging ? "none" : "transform 0.3s ease",
-          }}
-          className="z-20"
-        >
-          <Card className={`flex flex-col justify-between w-[500px] h-[700px] p-8 shadow-2xl rounded-lg mt-24 relative ${ isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black' } select-none ${ indicators.every(indicator => indicator.sections.every(section => section.selectedValue !== null) ) && currentSDGPage !== sdgData.length  ? 'border-2 border-green-300'  : ''}`}>
+  ref={cardRef}
+  style={{
+    position: "absolute", // Χρησιμοποιούμε absolute για ελεύθερη μετακίνηση
+    left: `${position.x}px`,  // Θέση x
+    top: `${position.y}px`,   // Θέση y
+    cursor: dragging ? "grabbing" : "default",
+    transition: dragging ? "none" : "transform 0.3s ease",
+  }}
+  className="z-20"
+>
+  <Card
+    className={`flex flex-col justify-between w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-auto max-h-[70vh] p-4 sm:p-6 md:p-8 shadow-2xl rounded-lg mt-8 mb-8 relative overflow-hidden ${
+      isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+    } select-none ${
+      indicators.every((indicator) =>
+        indicator.sections.every((section) => section.selectedValue !== null)
+      ) && currentSDGPage !== sdgData.length
+        ? "border-2 border-green-300"
+        : ""
+    }`}
+  >
 
             <div
               className="absolute top-2 right-2 cursor-move select-none"
@@ -440,9 +492,15 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
               {sdgData[currentSDGPage - 1].name}
             </h2>
 
-            <ScrollShadow size={100} className="w-full h-[400px] mb-4 overflow-y-scroll scrollbar-hide">
+            <ScrollShadow
+              size={100}
+              className="w-full h-[400px] mb-4 overflow-y-scroll scrollbar-hide"
+            >
               {indicators.map((indicator, indicatorIndex) => (
-                <div key={indicatorIndex} className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
+                <div
+                  key={indicatorIndex}
+                  className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md"
+                >
                   <h2 className="font-semibold text-lg mb-2">
                     {`${indicator.label} (Weight: ${indicator.weight})`}
                   </h2>
@@ -461,7 +519,11 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                           placeholder="Enter a number"
                           value={section.selectedValue || ""}
                           onChange={(e) =>
-                            updateIndicatorSection(indicatorIndex, sectionIndex, e.target.value)
+                            updateIndicatorSection(
+                              indicatorIndex,
+                              sectionIndex,
+                              e.target.value
+                            )
                           }
                           className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
                         />
@@ -470,7 +532,11 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                           orientation="horizontal"
                           value={section.selectedValue || ""}
                           onChange={(event) =>
-                            updateIndicatorSection(indicatorIndex, sectionIndex, event.target.value)
+                            updateIndicatorSection(
+                              indicatorIndex,
+                              sectionIndex,
+                              event.target.value
+                            )
                           }
                           className="space-x-4"
                         >
@@ -509,14 +575,19 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                   onPress={calculateScore}
                   isLoading={loading}
                 >
-                  {language === "en" ? "Calculate Evaluation" : "Υπολογισμός Αξιολόγησης"}
+                  {language === "en"
+                    ? "Calculate Evaluation"
+                    : "Υπολογισμός Αξιολόγησης"}
                 </Button>
               )}
 
               <div className="text-center text-xs text-gray-500">
                 {language === "en" ? (
                   <>
-                    <span className="font-bold text-sm text-gray-700">Handmade</span> by Uniwa students with{" "}
+                    <span className="font-bold text-sm text-gray-700">
+                      Handmade
+                    </span>{" "}
+                    by Uniwa students with{" "}
                     <img
                       src={HeartIcon}
                       alt="Heart Icon"
@@ -525,7 +596,10 @@ const checkAndNavigateNextPage = (updatedIndicators: Indicator[]) => {
                   </>
                 ) : (
                   <>
-                    <span className="font-bold text-sm text-gray-700">Χειροποίητο</span> από φοιτητές Uniwa με{" "}
+                    <span className="font-bold text-sm text-gray-700">
+                      Χειροποίητο
+                    </span>{" "}
+                    από φοιτητές Uniwa με{" "}
                     <img
                       src={HeartIcon}
                       alt="Heart Icon"
