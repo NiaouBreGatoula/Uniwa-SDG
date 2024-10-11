@@ -1,13 +1,19 @@
 export interface Section {
   possibleValues?: string[];
   selectedValue: string | null;
-  isTextField?: boolean;
+  isTextField?: boolean; // TODO: This should be renamed to isNumberField and also accept a number. This number will indicate how many Number Input Fields should be displayed
+  NumberInputFields?: NumberInputField[];
+}
+
+interface NumberInputField {
+  name: string;
+  placeholder: string;
 }
 
 export interface IndicatorType {
   label: string;
   weight: number;
-  formulaType: string;
+  formulaType?: string;
   sections: Section[];
   textField?: string;
 }
