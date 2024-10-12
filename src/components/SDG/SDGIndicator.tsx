@@ -25,10 +25,8 @@ const Indicator = ({
       {indicator.sections.map((section: Section, sectionIndex: number) => (
         <div key={sectionIndex} className="mb-4">
           <SDGSection
-            indicatorIndex={indicatorIndex}
             section={section}
-            sectionIndex={sectionIndex}
-            updateIndicatorSection={updateIndicatorSection}
+            inputName={}
           />
         </div>
       ))}

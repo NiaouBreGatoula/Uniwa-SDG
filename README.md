@@ -68,3 +68,9 @@ It is also possible to have one(or more) Number Input instead of Radio Buttons.
 - **Ability to upload a file** (JSON, CSV) with SDG data and have the app calculate the SDG's Progress. This is especially useful as we need data from a previous year to calculate the progress.
 - **Ability to export the data** (JSON, CSV) to the user's device, so it can easily be imported (uploaded) again in the future.
 - **Display and Print Report** containing graphs.
+
+### Developer Notes
+
+#### Conventions
+
+- **Input Names**: Must be 2 number seperated with '-' (e.g. 1-2, 2-3, 3-4, etc.). The first number represents the Indicator's number and the second number represents the Section's number.

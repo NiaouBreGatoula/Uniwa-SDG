@@ -1,28 +1,29 @@
-export interface Section {
-  possibleValues?: string[];
-  selectedValue: string | null;
-  isTextField?: boolean; // TODO: This should be renamed to isNumberField and also accept a number. This number will indicate how many Number Input Fields should be displayed
-  NumberInputFields?: NumberInputField[];
-}
+// These types are used to define the structure of the SDG data that is used in the application.
 
-interface NumberInputField {
-  name: string;
-  placeholder: string;
+export interface SDG {
+  label: string;
+  standsFor?: SDGType;
+  indicators: IndicatorType[];
 }
 
 export interface IndicatorType {
   label: string;
   weight: number;
-  formulaType?: string;
   sections: Section[];
-  textField?: string;
+  type: IndicatorVariant;
 }
 
-export interface SDG {
-  name: string;
-  standsFor?: SDGType;
-  indicators: IndicatorType[];
+export type IndicatorVariant = "Radio" | "NumberField";
+
+export interface Section {
+  label: string;
+  placeholder?: string;
+  possibleValues?: string[];
+  selectedValue: string | null;
+  type: SectionType;
 }
+
+export type SectionType = "Radio" | "NumberField";
 
 export type SDGType =
   | "No Poverty"
