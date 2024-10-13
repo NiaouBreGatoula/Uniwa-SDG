@@ -3,12 +3,6 @@ import SDGSection from "./SDGSection";
 
 interface IndicatorProps {
   indicator: IndicatorType;
-  updateIndicatorSection: (
-    indicatorIndex: number,
-    sectionIndex: number,
-    value: string
-  ) => void;
-  indicatorIndex: number;
 }
 
 const Indicator = ({ indicator }: IndicatorProps) => {
@@ -20,7 +14,11 @@ const Indicator = ({ indicator }: IndicatorProps) => {
 
       {indicator.sections.map((section: Section, sectionIndex: number) => (
         <div key={sectionIndex} className="mb-4">
-          <SDGSection section={section} inputName={section.inputName} />
+          <SDGSection
+            section={section}
+            inputName={section.inputName}
+            IndicatorName={indicator.label}
+          />
         </div>
       ))}
     </>

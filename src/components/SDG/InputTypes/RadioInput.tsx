@@ -16,17 +16,22 @@ const RadioInput = ({
 
   const selectedValue = appState[targetedYear].get(name)?.selectedValue;
 
+  // console.log(`Radio Name: ${name}`);
+  // console.log("Radio Possible Values: ", possibleValues);
+  console.log("Targeted Year: ", targetedYear);
+  console.log("Radio Selected Value: ", selectedValue);
+
   return (
     <RadioGroup
       orientation="horizontal"
-      value={String(selectedValue ? selectedValue : "")}
+      value={String(selectedValue !== null ? selectedValue : "")}
       className="space-x-4"
       name={name}
       onChange={handleUserInput}
     >
       {possibleValues.map((value, valueIndex) => (
         <Radio
-          key={valueIndex}
+          key={`${name}-${valueIndex}`}
           value={value}
           className="hover:bg-gray-200 focus:ring-blue-500"
         >

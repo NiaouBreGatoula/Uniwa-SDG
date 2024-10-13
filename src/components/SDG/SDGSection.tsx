@@ -5,18 +5,10 @@ import RadioInput from "./InputTypes/RadioInput";
 interface SDGSectionProps {
   inputName: string;
   section: Section;
-  // sectionIndex: number;
-  // indicatorIndex: number;
-  // updateIndicatorSection: (
-  //   indicatorIndex: number,
-  //   sectionIndex: number,
-  //   value: string
-  // ) => void;
+  IndicatorName: string;
 }
 
-const SDGSection = ({ inputName, section }: SDGSectionProps) => {
-  const [, sectionIndex] = inputName.split("-").map(Number);
-
+const SDGSection = ({ inputName, section, IndicatorName }: SDGSectionProps) => {
   if (!section) {
     return null;
   }
@@ -30,10 +22,10 @@ const SDGSection = ({ inputName, section }: SDGSectionProps) => {
 
   return (
     <>
-      <h3 className="font-medium text-sm mb-2">{section.label}</h3>
+      <h3 className="font-medium text-sm mb-2">{`${IndicatorName}.${section.label}`}</h3>
 
       {section.type === "NumberField" ? (
-        <NumberFieldInput name={inputName} />
+        <NumberFieldInput name={inputName} placeholder={section.placeholder} />
       ) : (
         <RadioInput name={inputName} possibleValues={section.possibleValues!} />
       )}

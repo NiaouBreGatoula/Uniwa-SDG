@@ -3,6 +3,7 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useEffect,
   //   Dispatch,
   //   SetStateAction,
 } from "react";
@@ -27,40 +28,48 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
   //   const [count, setCount] = useState<number>(0);
   const [appState, setAppState] = useState<AppState | null>(null);
   const [targetedYear, setTargetedYear] = useState<YearType>("currentYear");
+  console.log("Rendered GlobalStateProvider");
 
-  // Initialize the app state
+  useEffect(() => {
+    // 1. Create a Map with the section name as the key and the section data as the value
+    const sectionsInit = new Map<string, SectionData>();
 
-  // 1. Create a Map with the section name as the key and the section data as the value
-  const sectionsInit = new Map<string, SectionData>();
-
-  // 2. Retrieve all the sections from the allSDGs Array and add them to the Map
-  allSDGs.forEach((sdg) => {
-    sdg.indicators.forEach((indicator) => {
-      indicator.sections.forEach((section) => {
-        sectionsInit.set(section.inputName, {
-          selectedValue: null,
-          inputName: section.inputName,
+    // 2. Retrieve all the sections from the allSDGs Array and add them to the Map
+    allSDGs.forEach((sdg) => {
+      sdg.indicators.forEach((indicator) => {
+        indicator.sections.forEach((section) => {
+          sectionsInit.set(section.inputName, {
+            selectedValue: null,
+            inputName: section.inputName,
+          });
         });
       });
     });
-  });
 
-  // 3. Create the initial state
-  const initialState: AppState = {
-    currentYear: sectionsInit,
-    comparisonYear: sectionsInit,
-  };
-
-  // 4. Set the initial state
-  if (!appState) {
-    setAppState(initialState);
-  }
+    // 3. Create the initial state
+    const initialState: AppState = {
+      currentYear: new Map(sectionsInit),
+      comparisonYear: new Map(sectionsInit),
+    };
+    // 4. Set the initial state
+    if (!appState) {
+      setAppState(initialState);
+    }
+  }, []);
 
   const handleUserInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name: inputName, value } = event.target; // E.g. "1-2"
 
-      console.log("The Event: ", event.target);
+      console.log(
+        "The Event Target Name: ",
+        inputName,
+        " | Translates to: Indicator: ",
+        inputName.split("-")[0],
+        ",  Section: ",
+        inputName.split("-")[1]
+      );
+      console.log("The Event Target Value: ", value);
 
       // Update the state immutably
       setAppState((prev) => {
@@ -97,14 +106,16 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
           selectedValue: Number(value),
         };
 
-        stateClone[targetedYear].set(inputName, updatedSectionData);
+        const updatedMap = new Map(stateClone[targetedYear]);
+        updatedMap.set(inputName, updatedSectionData);
+        stateClone[targetedYear] = updatedMap;
 
         return stateClone;
       });
 
       console.log("handleUserInput: ", appState);
     },
-    [appState, targetedYear]
+    [targetedYear]
   );
 
   return (

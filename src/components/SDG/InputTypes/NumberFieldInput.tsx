@@ -3,13 +3,17 @@ import useGlobalState from "../../../contexts/useGlobalState";
 
 type Size = "sm" | "md" | "lg";
 
+interface NumberFieldInputProps {
+  name: string;
+  size?: Size;
+  placeholder?: string;
+}
+
 const NumberFieldInput = ({
   name,
   size = "lg",
-}: {
-  name: string;
-  size?: Size;
-}) => {
+  placeholder,
+}: NumberFieldInputProps) => {
   const { appState, handleUserInput, targetedYear } = useGlobalState();
 
   if (!appState) {
@@ -24,7 +28,7 @@ const NumberFieldInput = ({
       type="number"
       label=""
       name={name}
-      placeholder="Enter a number"
+      placeholder={placeholder}
       value={String(selectedValue ? selectedValue : "")}
       onChange={handleUserInput}
       className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
