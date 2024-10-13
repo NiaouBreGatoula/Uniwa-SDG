@@ -8,7 +8,7 @@ interface SDGSectionProps {
   IndicatorName: string;
 }
 
-const SDGSection = ({ inputName, section, IndicatorName }: SDGSectionProps) => {
+const SDGSection = ({ inputName, section }: SDGSectionProps) => {
   if (!section) {
     return null;
   }
@@ -22,7 +22,7 @@ const SDGSection = ({ inputName, section, IndicatorName }: SDGSectionProps) => {
 
   return (
     <>
-      <h3 className="font-medium text-sm mb-2">{`${IndicatorName}.${section.label}`}</h3>
+      <h3 className="font-medium text-sm mb-2">{`${section.label}`}</h3>
 
       {section.type === "NumberField" ? (
         <NumberFieldInput name={inputName} placeholder={section.placeholder} />

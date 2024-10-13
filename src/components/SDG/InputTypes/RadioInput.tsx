@@ -18,8 +18,8 @@ const RadioInput = ({
 
   // console.log(`Radio Name: ${name}`);
   // console.log("Radio Possible Values: ", possibleValues);
-  console.log("Targeted Year: ", targetedYear);
-  console.log("Radio Selected Value: ", selectedValue);
+  // console.log("Targeted Year: ", targetedYear);
+  // console.log("Radio Selected Value: ", selectedValue);
 
   return (
     <RadioGroup

@@ -6,6 +6,8 @@ import type { SDG, IndicatorType, Section } from "./types/sdgTypes";
 import MyHeader from "./components/Navbar/MyHeader";
 import { allSDGs } from "./constants/sdgPages";
 import MyCard from "./components/Card/MyCard";
+import { calcFinalSDGScore } from "./utils/sdgCalculationUtils";
+import useGlobalState from "./contexts/useGlobalState";
 
 const App = () => {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
@@ -26,6 +28,8 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const { appState } = useGlobalState();
+
   useEffect(() => {
     setIndicators(sdgDataState[currentSDGPage - 1].indicators);
   }, [currentSDGPage, sdgDataState]);
@@ -41,7 +45,7 @@ const App = () => {
   ) => {
     const updatedIndicators = [...indicators];
     updatedIndicators[indicatorIndex].sections[sectionIndex].selectedValue =
-      value;
+      Number(value);
 
     setIndicators(updatedIndicators);
 
@@ -77,18 +81,22 @@ const App = () => {
   const calculateScore = () => {
     setLoading(true);
     setTimeout(() => {
-      let totalScore = 0;
-      indicators.forEach((indicator) => {
-        indicator.sections.forEach((section) => {
-          if (section.selectedValue !== null) {
-            const value = parseFloat(section.selectedValue);
-            totalScore += value * indicator.weight;
-          }
-        });
-      });
-      setResult(totalScore);
-      setLoading(false);
-    }, 3000);
+      if (!appState) {
+        console.error(
+          "While trying to calculate the Total SDG Score: Global State not found"
+        );
+        return;
+      }
+      try {
+        const totalScore = calcFinalSDGScore(appState?.currentYear);
+        setResult(totalScore);
+      } catch (error) {
+        // Add Toast Notification Here
+        console.error("Error while calculating the Total SDG Score: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }, 1000);
   };
 
   const handleRestart = () => {

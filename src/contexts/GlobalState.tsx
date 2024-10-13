@@ -28,7 +28,9 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
   //   const [count, setCount] = useState<number>(0);
   const [appState, setAppState] = useState<AppState | null>(null);
   const [targetedYear, setTargetedYear] = useState<YearType>("currentYear");
-  console.log("Rendered GlobalStateProvider");
+
+  const testingMode = true;
+  // console.log("Rendered GlobalStateProvider");
 
   useEffect(() => {
     // 1. Create a Map with the section name as the key and the section data as the value
@@ -39,7 +41,7 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
       sdg.indicators.forEach((indicator) => {
         indicator.sections.forEach((section) => {
           sectionsInit.set(section.inputName, {
-            selectedValue: null,
+            selectedValue: testingMode ? section.selectedValue : null,
             inputName: section.inputName,
           });
         });
@@ -61,15 +63,15 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name: inputName, value } = event.target; // E.g. "1-2"
 
-      console.log(
-        "The Event Target Name: ",
-        inputName,
-        " | Translates to: Indicator: ",
-        inputName.split("-")[0],
-        ",  Section: ",
-        inputName.split("-")[1]
-      );
-      console.log("The Event Target Value: ", value);
+      // console.log(
+      //   "The Event Target Name: ",
+      //   inputName,
+      //   " | Translates to: Indicator: ",
+      //   inputName.split("-")[0],
+      //   ",  Section: ",
+      //   inputName.split("-")[1]
+      // );
+      // console.log("The Event Target Value: ", value);
 
       // Update the state immutably
       setAppState((prev) => {
@@ -113,7 +115,7 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         return stateClone;
       });
 
-      console.log("handleUserInput: ", appState);
+      // console.log("handleUserInput: ", appState);
     },
     [targetedYear]
   );
