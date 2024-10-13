@@ -10,11 +10,13 @@ const NumberFieldInput = ({
   name: string;
   size?: Size;
 }) => {
-  const { SDGData, handleUserInput } = useGlobalState();
+  const { appState, handleUserInput, targetedYear } = useGlobalState();
 
-  const [indicatorID, sectionIndex] = name.split("-").map(Number);
-  const sections = SDGData?.indicators.get(indicatorID)?.sections;
-  const selectedValue = sections?.get(sectionIndex)?.selectedValue;
+  if (!appState) {
+    return null;
+  }
+
+  const selectedValue = appState[targetedYear].get(name)?.selectedValue;
 
   return (
     <Input

@@ -4,15 +4,15 @@ import videoBg from "./assets/video.mp4";
 import Line from "../src/assets/line.svg";
 import type { SDG, IndicatorType, Section } from "./types/sdgTypes";
 import MyHeader from "./components/Navbar/MyHeader";
-import { sdgData } from "./constants/sdgData";
+import { allSDGs } from "./constants/sdgPages";
 import MyCard from "./components/Card/MyCard";
 
 const App = () => {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
-  const [sdgDataState, setSdgDataState] = useState<SDG[]>(sdgData);
+  const [sdgDataState, setSdgDataState] = useState<SDG[]>(allSDGs);
   const [currentSDGPage, setCurrentSDGPage] = useState<number>(1);
   const [indicators, setIndicators] = useState<IndicatorType[]>(
-    sdgData[0].indicators
+    allSDGs[0].indicators
   );
   const [result, setResult] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,7 +54,7 @@ const App = () => {
     );
 
     const hasTextField = updatedIndicators.some((indicator) =>
-      indicator.sections.some((section) => section.isTextField)
+      indicator.sections.some((section) => section.type === "NumberField")
     );
 
     if (allFilled && !hasTextField) {
@@ -67,7 +67,7 @@ const App = () => {
 
         setCompletedPages([...completedPages, currentSDGPage]);
 
-        if (currentSDGPage < sdgData.length) {
+        if (currentSDGPage < allSDGs.length) {
           setCurrentSDGPage(currentSDGPage + 1);
         }
       }
@@ -207,7 +207,7 @@ const App = () => {
           language={language}
           loading={loading}
           position={position}
-          sdgData={sdgData}
+          sdgData={allSDGs}
           setIsDarkMode={setIsDarkMode}
           updateIndicatorSection={updateIndicatorSection}
         />

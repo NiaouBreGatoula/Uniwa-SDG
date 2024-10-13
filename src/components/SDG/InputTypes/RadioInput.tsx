@@ -1,22 +1,30 @@
 import { RadioGroup, Radio } from "@nextui-org/react";
 import useGlobalState from "../../../contexts/useGlobalState";
 
-const RadioInput = ({ name }: { name: string }) => {
-  const { SDGData, handleUserInput } = useGlobalState();
+const RadioInput = ({
+  name,
+  possibleValues,
+}: {
+  name: string;
+  possibleValues: string[];
+}) => {
+  const { appState, handleUserInput, targetedYear } = useGlobalState();
 
-  const [indicatorID, sectionIndex] = name.split("-").map(Number);
-  const sections = SDGData?.indicators.get(indicatorID)?.sections;
-  const section = sections?.get(sectionIndex);
-  const selectedValue = section?.selectedValue;
+  if (!appState) {
+    return null;
+  }
+
+  const selectedValue = appState[targetedYear].get(name)?.selectedValue;
 
   return (
     <RadioGroup
       orientation="horizontal"
       value={String(selectedValue ? selectedValue : "")}
-      onChange={handleUserInput}
       className="space-x-4"
+      name={name}
+      onChange={handleUserInput}
     >
-      {section?.possibleValues?.map((value, valueIndex) => (
+      {possibleValues.map((value, valueIndex) => (
         <Radio
           key={valueIndex}
           value={value}

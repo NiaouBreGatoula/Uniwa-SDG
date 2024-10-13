@@ -146,6 +146,26 @@ const SDG_17: SDG = {
   ],
 };
 
+const allSDGs: SDG[] = [
+  SDG_01,
+  SDG_02,
+  SDG_03,
+  SDG_04,
+  SDG_05,
+  SDG_06,
+  SDG_07,
+  SDG_08,
+  SDG_09,
+  SDG_10,
+  SDG_11,
+  SDG_12,
+  SDG_13,
+  SDG_14,
+  SDG_15,
+  SDG_16,
+  SDG_17,
+];
+
 export {
   SDG_01,
   SDG_02,
@@ -164,4 +184,5 @@ export {
   SDG_15,
   SDG_16,
   SDG_17,
+  allSDGs,
 };

@@ -1,7 +1,6 @@
 import { Pagination, Button } from "@nextui-org/react";
-import { sdgData } from "../../constants/sdgData";
-
 import HeartIcon from "../../assets/love.svg";
+import { allSDGs } from "../../constants/sdgPages";
 
 interface CardPaginationProps {
   currentSDGPage: number;
@@ -23,7 +22,7 @@ const CardPagination = ({
       <div className="select-none">
         <Pagination
           showControls
-          total={sdgData.length}
+          total={allSDGs.length}
           initialPage={1}
           page={currentSDGPage}
           onChange={handlePageChange}
@@ -31,7 +30,7 @@ const CardPagination = ({
         />
       </div>
 
-      {currentSDGPage === sdgData.length && (
+      {currentSDGPage === allSDGs.length && (
         <Button
           className="select-none py-2 px-4 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600"
           onPress={calculateScore}

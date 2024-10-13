@@ -11,11 +11,7 @@ interface IndicatorProps {
   indicatorIndex: number;
 }
 
-const Indicator = ({
-  indicator,
-  updateIndicatorSection,
-  indicatorIndex,
-}: IndicatorProps) => {
+const Indicator = ({ indicator }: IndicatorProps) => {
   return (
     <>
       <h2 className="font-semibold text-lg mb-2">
@@ -24,10 +20,7 @@ const Indicator = ({
 
       {indicator.sections.map((section: Section, sectionIndex: number) => (
         <div key={sectionIndex} className="mb-4">
-          <SDGSection
-            section={section}
-            inputName={}
-          />
+          <SDGSection section={section} inputName={section.inputName} />
         </div>
       ))}
     </>

@@ -90,7 +90,7 @@ const MyCard = ({
 
         {/* Here is the Card's Title */}
         <h2 className="text-2xl font-extrabold text-center mb-8 tracking-wide">
-          {sdgData[currentSDGPage - 1].name}
+          {sdgData[currentSDGPage - 1].label}
         </h2>
 
         {/* Here is the Card's Content */}

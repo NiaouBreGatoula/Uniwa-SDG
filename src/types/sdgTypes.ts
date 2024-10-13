@@ -20,6 +20,7 @@ export interface Section {
   placeholder?: string;
   possibleValues?: string[];
   selectedValue: string | null;
+  inputName: string;
   type: SectionType;
 }
 
