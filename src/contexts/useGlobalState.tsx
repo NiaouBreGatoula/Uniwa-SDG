@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GlobalStateContext } from "./GlobalState";
-import { GlobalState } from "../types/GlobalStateTypes";
+import { GlobalState } from "../types/GlobalState_Types";
 
 // Custom hook to use the global state
 const useGlobalState = (): GlobalState => {

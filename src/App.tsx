@@ -2,12 +2,18 @@ import { useState, useEffect, useRef } from "react";
 import { useDisclosure, CircularProgress, User, Link } from "@nextui-org/react";
 import videoBg from "./assets/video.mp4";
 import Line from "../src/assets/line.svg";
-import type { SDG, IndicatorType, Section } from "./types/sdgTypes";
+import type { SDG } from "./types/SDG_Types";
 import MyHeader from "./components/Navbar/MyHeader";
 import { allSDGs } from "./constants/sdgPages";
 import MyCard from "./components/Card/MyCard";
 import { calcFinalSDGScore } from "./utils/sdgCalculationUtils";
 import useGlobalState from "./contexts/useGlobalState";
+import {
+  IndicatorType,
+  SimpleIndicator,
+  SpecialIndicator,
+} from "./types/SDG_Indicators";
+import { Section } from "./types/SDG_Sections";
 
 const App = () => {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
@@ -43,8 +49,10 @@ const App = () => {
     sectionIndex: number,
     value: string
   ) => {
-    const updatedIndicators = [...indicators];
-    updatedIndicators[indicatorIndex].sections[sectionIndex].selectedValue =
+    const updatedIndicators = [...indicators] as
+      | SimpleIndicator[]
+      | SpecialIndicator[];
+    updatedIndicators[indicatorIndex].sections[sectionIndex].value =
       Number(value);
 
     setIndicators(updatedIndicators);
@@ -52,13 +60,17 @@ const App = () => {
     checkAndNavigateNextPage(updatedIndicators);
   };
 
-  const checkAndNavigateNextPage = (updatedIndicators: IndicatorType[]) => {
+  const checkAndNavigateNextPage = (
+    updatedIndicators: SimpleIndicator[] | SpecialIndicator[]
+  ) => {
     const allFilled = updatedIndicators.every((indicator) =>
-      indicator.sections.every((section) => section.selectedValue !== null)
+      indicator.sections.every((section: Section) => section.value !== null)
     );
 
     const hasTextField = updatedIndicators.some((indicator) =>
-      indicator.sections.some((section) => section.type === "NumberField")
+      indicator.sections.some(
+        (section: Section) => section.type === "NumberField"
+      )
     );
 
     if (allFilled && !hasTextField) {
@@ -88,7 +100,7 @@ const App = () => {
         return;
       }
       try {
-        const totalScore = calcFinalSDGScore(appState?.currentYear);
+        const totalScore = calcFinalSDGScore(appState);
         setResult(totalScore);
       } catch (error) {
         // Add Toast Notification Here
@@ -97,18 +109,32 @@ const App = () => {
         setLoading(false);
       }
     }, 1000);
+    console.log("App State: ", appState);
   };
 
   const handleRestart = () => {
     const resetSDGData = sdgDataState.map((sdg) => ({
       ...sdg,
-      indicators: sdg.indicators.map((indicator) => ({
-        ...indicator,
-        sections: indicator.sections.map((section: Section) => ({
-          ...section,
-          selectedValue: null,
-        })),
-      })),
+      indicators: sdg.indicators.map((indicator) => {
+        if (indicator.type === "simple") {
+          return {
+            ...indicator,
+            sections: indicator.sections.map((section) => ({
+              ...section,
+              value: null,
+            })),
+          } as SimpleIndicator;
+        } else if (indicator.type === "pink" || indicator.type === "green") {
+          return {
+            ...indicator,
+            sections: indicator.sections.map((section) => ({
+              ...section,
+              value: null,
+            })),
+          } as SpecialIndicator;
+        }
+        return indicator; // Handle any other types if necessary
+      }),
     }));
 
     setSdgDataState(resetSDGData);

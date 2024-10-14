@@ -1,31 +1,15 @@
 // These types are used to define the structure of the SDG data that is used in the application.
 
+import {
+  SimpleIndicator,
+  SpecialIndicator,
+} from "./SDG_Indicators";
+
 export interface SDG {
   label: string;
   standsFor?: SDGType;
-  indicators: IndicatorType[];
+  indicators: (SimpleIndicator | SpecialIndicator)[];
 }
-
-export interface IndicatorType {
-  label: string;
-  weight: number;
-  sections: Section[];
-  type: IndicatorVariant;
-  howToHandle?: "result < 1 then 0" | "result > 1 then 0";
-}
-
-export type IndicatorVariant = "Radio" | "NumberField";
-
-export interface Section {
-  label: string;
-  placeholder?: string;
-  possibleValues?: string[];
-  selectedValue: number | null;
-  inputName: string;
-  type: SectionType;
-}
-
-export type SectionType = "Radio" | "NumberField";
 
 export type SDGType =
   | "No Poverty"

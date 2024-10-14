@@ -15,8 +15,6 @@ import {
 import LanguageIcon from "../../assets/lang.svg";
 import AboutUs from "../../assets/about.svg";
 import RestartIcon from "../../assets/restart.svg";
-import CrosshairIcon from "../../assets/crosshair.svg";
-import useGlobalState from "../../contexts/useGlobalState";
 
 interface NavbarOptionsProps {
   handleRestart: () => void;
@@ -35,7 +33,6 @@ const NavbarOptions = ({
   onOpenChange,
   handleLanguageChange,
 }: NavbarOptionsProps) => {
-  const { setTargetedYear } = useGlobalState();
   return (
     <nav className="select-none">
       <ul className="flex space-x-4 select-none">
@@ -53,27 +50,6 @@ const NavbarOptions = ({
               className="inline-block mr-2 h-4 w-4 select-none"
             />
             {language === "en" ? "Restart" : "Επανεκκίνηση"}
-          </Button>
-
-          <Button
-            color="primary"
-            variant="shadow"
-            radius="sm"
-            onPress={() =>
-              setTargetedYear((prev) =>
-                prev === "currentYear" ? "comparisonYear" : "currentYear"
-              )
-            }
-            className="select-none"
-          >
-            <img
-              src={CrosshairIcon}
-              alt="Change Target  Year"
-              className="inline-block mr-2 h-4 w-4 select-none"
-            />
-            {language === "en"
-              ? "Toggle Target Year"
-              : "Αλλαγή Επιλεγμένου Έτους"}
           </Button>
 
           <Button

@@ -1,9 +1,10 @@
 import { ScrollShadow, Card } from "@nextui-org/react";
 import ThemeSwitch from "../theme/ThemeSwitch";
-import type { IndicatorType, SDG, Section } from "../../types/sdgTypes";
 import Indicator from "../SDG/SDGIndicator";
 import CardPagination from "./CardPagination";
-import useGlobalState from "../../contexts/useGlobalState";
+import { IndicatorType } from "../../types/SDG_Indicators";
+import { Section } from "../../types/SDG_Sections";
+import { SDG } from "../../types/SDG_Types";
 
 interface MyCardProps {
   cardRef: React.RefObject<HTMLDivElement>;
@@ -43,7 +44,6 @@ const MyCard = ({
   loading,
   language,
 }: MyCardProps) => {
-  const { targetedYear } = useGlobalState();
   return (
     <div
       ref={cardRef}
@@ -64,7 +64,7 @@ const MyCard = ({
         } select-none ${
           indicators.every((indicator) =>
             indicator.sections.every(
-              (section: Section) => section.selectedValue !== null
+              (section: Section) => section.value !== null
             )
           ) && currentSDGPage !== sdgData.length
             ? "border-2 border-green-300"
@@ -81,12 +81,6 @@ const MyCard = ({
             className="h-6 w-6 select-none"
             onDragStart={(e) => e.preventDefault()}
           />
-        </div>
-
-        <div>
-          <h3 className="absolute inset-x-0 top-0 text-center pt-2">
-            Target Year: <strong>{targetedYear}</strong>
-          </h3>
         </div>
 
         <div className="absolute top-2 left-2 select-none">

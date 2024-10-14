@@ -8,13 +8,15 @@ const RadioInput = ({
   name: string;
   possibleValues: string[];
 }) => {
-  const { appState, handleUserInput, targetedYear } = useGlobalState();
+  const { appState, handleUserInputSimpleIndicator } = useGlobalState();
 
   if (!appState) {
     return null;
   }
 
-  const selectedValue = appState[targetedYear].get(name)?.selectedValue;
+  const selectedValue = appState.get(name)?.sections.find((section) => {
+    return section.inputName === name;
+  })?.value;
 
   // console.log(`Radio Name: ${name}`);
   // console.log("Radio Possible Values: ", possibleValues);
@@ -27,7 +29,7 @@ const RadioInput = ({
       value={String(selectedValue !== null ? selectedValue : "")}
       className="space-x-4"
       name={name}
-      onChange={handleUserInput}
+      onChange={handleUserInputSimpleIndicator}
     >
       {possibleValues.map((value, valueIndex) => (
         <Radio

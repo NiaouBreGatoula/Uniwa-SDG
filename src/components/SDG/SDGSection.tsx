@@ -1,4 +1,4 @@
-import type { Section } from "../../types/sdgTypes";
+import { Section } from "../../types/SDG_Sections";
 import NumberFieldInput from "./InputTypes/NumberFieldInput";
 import RadioInput from "./InputTypes/RadioInput";
 

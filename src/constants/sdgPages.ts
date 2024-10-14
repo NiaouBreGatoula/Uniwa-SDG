@@ -1,4 +1,4 @@
-import { SDG } from "../types/sdgTypes";
+import { SDG } from "../types/SDG_Types";
 // import {
 //   indicator_01,
 //   indicator_02,
@@ -61,7 +61,7 @@ import {
   indicator_22,
   indicator_23,
   indicator_24,
-  indicator_25,
+  // indicator_25,
   indicator_26,
   indicator_27,
   indicator_28,
@@ -150,7 +150,7 @@ const SDG_12: SDG = {
 const SDG_13: SDG = {
   label: "SDG 13",
   standsFor: "Quality Education",
-  indicators: [indicator_25, indicator_26],
+  indicators: [indicator_26],
 };
 
 const SDG_14: SDG = {

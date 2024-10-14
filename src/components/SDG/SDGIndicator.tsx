@@ -1,4 +1,5 @@
-import type { IndicatorType, Section } from "../../types/sdgTypes";
+import { IndicatorType } from "../../types/SDG_Indicators";
+import { Section } from "../../types/SDG_Sections";
 import SDGSection from "./SDGSection";
 
 interface IndicatorProps {

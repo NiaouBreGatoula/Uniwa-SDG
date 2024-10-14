@@ -14,13 +14,18 @@ const NumberFieldInput = ({
   size = "lg",
   placeholder,
 }: NumberFieldInputProps) => {
-  const { appState, handleUserInput, targetedYear } = useGlobalState();
+  const { appState, handleUserInputSpecialIndicator } = useGlobalState();
+  // const [targetYear, setTargetYear] = useState<
+  //   "currentYear" | "comparisonYear"
+  // >("currentYear");
 
   if (!appState) {
     return null;
   }
 
-  const selectedValue = appState[targetedYear].get(name)?.selectedValue;
+  const selectedValue = appState.get(name)?.sections.find((section) => {
+    return section.inputName === name;
+  })?.value;
 
   return (
     <Input
@@ -30,7 +35,7 @@ const NumberFieldInput = ({
       name={name}
       placeholder={placeholder}
       value={String(selectedValue ? selectedValue : "")}
-      onChange={handleUserInput}
+      onChange={handleUserInputSpecialIndicator}
       className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
     />
   );
