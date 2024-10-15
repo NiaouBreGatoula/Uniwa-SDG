@@ -1,5 +1,27 @@
 import { SimpleIndicator, SpecialIndicator } from "../types/SDG_Indicators";
-import { percentageChange, roundToFour } from "./generaUtils";
+import { percentageChange, roundToFour } from "./generalUtils";
+
+// SIMPLE INDICATORS
+export const calcSimpleIndicator = (indicator: SimpleIndicator): number => {
+  const sectionValues = indicator.sections.map((section) => {
+    if (section.value === null) {
+      throw new Error(
+        `calcSimpleIndicatorScore: Section: ${section.inputName} value is null`
+      );
+    }
+    return section.value;
+  });
+
+  const result = roundToFour(
+    sectionValues.reduce(
+      (acc, currValue) => acc + currValue * indicator.weight,
+      0
+    )
+  );
+
+  indicator.score = result;
+  return result;
+};
 
 export const calcSpecialIndicator = (indicator: SpecialIndicator): number => {
   if (indicator.type === "green") {
@@ -13,7 +35,7 @@ export const calcSpecialIndicator = (indicator: SpecialIndicator): number => {
   throw new Error("calcSpecialIndicator: Indicator type not found");
 };
 
-export const calcGreenIndicator = (indicator: SpecialIndicator): number => {
+const calcGreenIndicator = (indicator: SpecialIndicator): number => {
   if (
     indicator.currentValues[0] === null ||
     indicator.currentValues[1] === null ||
@@ -49,7 +71,7 @@ export const calcGreenIndicator = (indicator: SpecialIndicator): number => {
   return result;
 };
 
-export const calcPinkIndicator = (indicator: SpecialIndicator): number => {
+const calcPinkIndicator = (indicator: SpecialIndicator): number => {
   if (
     indicator.currentValues[0] === null ||
     indicator.currentValues[1] === null ||
@@ -82,27 +104,5 @@ export const calcPinkIndicator = (indicator: SpecialIndicator): number => {
   console.log("final score: ", result);
   console.log("------------------------------------");
 
-  return result;
-};
-
-// SIMPLE INDICATORS
-export const calcSimpleIndicator = (indicator: SimpleIndicator): number => {
-  const sectionValues = indicator.sections.map((section) => {
-    if (section.value === null) {
-      throw new Error(
-        `calcSimpleIndicatorScore: Section: ${section.inputName} value is null`
-      );
-    }
-    return section.value;
-  });
-
-  const result = roundToFour(
-    sectionValues.reduce(
-      (acc, currValue) => acc + currValue * indicator.weight,
-      0
-    )
-  );
-
-  indicator.score = result;
   return result;
 };

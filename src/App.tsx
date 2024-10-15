@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useDisclosure, CircularProgress, User, Link } from "@nextui-org/react";
+import { useDisclosure, User, Link } from "@nextui-org/react";
 import videoBg from "./assets/video.mp4";
 import Line from "../src/assets/line.svg";
 import type { SDG } from "./types/SDG_Types";
@@ -14,6 +14,7 @@ import {
   SpecialIndicator,
 } from "./types/SDG_Indicators";
 import { Section } from "./types/SDG_Sections";
+import ResultsSection from "./components/ResultsSection/ResultsSection";
 
 const App = () => {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
@@ -247,21 +248,7 @@ const App = () => {
         />
       </div>
 
-      <div
-        className={`flex-1 flex items-center justify-center transition-all ${
-          loading || result !== null ? "backdrop-blur-sm" : "bg-transparent"
-        } select-none`}
-      >
-        {loading ? (
-          <div className="flex flex-col items-center text-white mt-4 select-none">
-            <CircularProgress label="Loading..." className="select-none" />
-          </div>
-        ) : result !== null ? (
-          <h1 className="text-8xl font-extrabold text-white select-none">
-            {result?.toFixed(2)}
-          </h1>
-        ) : null}
-      </div>
+      <ResultsSection loading={loading} result={result} />
 
       <div className="absolute bottom-5 right-5 flex flex-col space-y-4 z-20 select-none">
         <div className="opacity-20 hover:opacity-100 transition-opacity duration-300 select-none">

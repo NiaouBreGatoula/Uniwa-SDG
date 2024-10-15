@@ -205,6 +205,38 @@ const allSDGs: SDG[] = [
 
 const weirdIndicatorInputNames = ["3", "8", "9", "13", "17", "18", "24", "30"];
 const incompleteIndicators = ["Indicator 25"];
+const indicatorsResultCategories = {
+  categoryA: [
+    "Indicator 01",
+    "Indicator 02",
+    "Indicator 04",
+    "Indicator 05",
+    "Indicator 06",
+    "Indicator 07",
+    "Indicator 20",
+    "Indicator 25",
+    "Indicator 31",
+    "Indicator 32",
+  ],
+  categoryB: [
+    "Indicator 10",
+    "Indicator 11",
+    "Indicator 12",
+    "Indicator 14",
+    "Indicator 15",
+    "Indicator 16",
+    "Indicator 19",
+    "Indicator 21",
+    "Indicator 22",
+    "Indicator 23",
+    "Indicator 26",
+    "Indicator 27",
+    "Indicator 28",
+    "Indicator 29",
+    "Indicator 33",
+    "Indicator 34",
+  ],
+};
 
 export {
   SDG_01,
@@ -227,4 +259,5 @@ export {
   allSDGs,
   weirdIndicatorInputNames,
   incompleteIndicators,
+  indicatorsResultCategories,
 };
