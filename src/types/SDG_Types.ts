@@ -1,14 +1,12 @@
 // These types are used to define the structure of the SDG data that is used in the application.
 
-import {
-  SimpleIndicator,
-  SpecialIndicator,
-} from "./SDG_Indicators";
+import { SimpleIndicator, SpecialIndicator } from "./SDG_Indicators";
 
 export interface SDG {
   label: string;
   standsFor?: SDGType;
   indicators: (SimpleIndicator | SpecialIndicator)[];
+  indicatorsWithValues: (SimpleIndicator | SpecialIndicator)[];
 }
 
 export type SDGType =

@@ -21,22 +21,31 @@ interface GlobalStateProviderProps {
 }
 
 const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
+  const testingMode = true;
+
   const [appState, setAppState] = useState<AppState>(() => {
     const initialAppState = new Map<
       string,
       SimpleIndicator | SpecialIndicator
     >();
     allSDGs.forEach((sdg) => {
-      sdg.indicators.forEach((indicator) => {
-        indicator.sections.forEach((section) => {
-          initialAppState.set(section.inputName, indicator);
+      if (testingMode) {
+        sdg.indicatorsWithValues.forEach((indicator) => {
+          indicator.sections.forEach((section) => {
+            initialAppState.set(section.inputName, indicator);
+          });
         });
-      });
+      } else {
+        sdg.indicators.forEach((indicator) => {
+          indicator.sections.forEach((section) => {
+            initialAppState.set(section.inputName, indicator);
+          });
+        });
+      }
     });
     return initialAppState;
   });
 
-  const testingMode = true;
   // console.log("Rendered GlobalStateProvider");
 
   // useEffect(() => {

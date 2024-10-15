@@ -35,7 +35,7 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { appState } = useGlobalState();
+  const { appState, testingMode } = useGlobalState();
 
   useEffect(() => {
     setIndicators(sdgDataState[currentSDGPage - 1].indicators);
@@ -292,6 +292,12 @@ const App = () => {
             }}
           />
         </div>
+
+        {testingMode && (
+          <div className="fixed bottom-3 left-2 p-4 rounded-lg bg-red-500 text-white drop-shadow-lg text-4xl">
+            Test Mode
+          </div>
+        )}
       </div>
     </div>
   );

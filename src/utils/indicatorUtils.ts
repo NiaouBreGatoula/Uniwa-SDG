@@ -46,6 +46,7 @@ const calcGreenIndicator = (indicator: SpecialIndicator): number => {
       "calcGreenIndicator: currentValues or comparisonValues are null"
     );
   }
+  
   const currentValue = indicator.currentValues[0] / indicator.currentValues[1];
   const comparisonValue =
     indicator.comparisonValues[0] / indicator.comparisonValues[1];
