@@ -6,7 +6,7 @@ const ThemeSwitch = (props: SwitchProps) => {
   const {
     Component,
     slots,
-    isSelected, 
+    isSelected,
     getBaseProps,
     getInputProps,
     getWrapperProps,
@@ -22,13 +22,13 @@ const ThemeSwitch = (props: SwitchProps) => {
           {...getWrapperProps()}
           className={slots.wrapper({
             class: [
-              "w-8 h-8",  /* prepei na to ftiakse */
+              "w-8 h-8" /* prepei na to ftiakse */,
               "flex items-center justify-center",
-              "rounded-lg bg-default-100 hover:bg-default-200", 
+              "rounded-lg bg-default-100 hover:bg-default-200",
             ],
           })}
         >
-          {isSelected ? <SunIcon /> : <MoonIcon />} 
+          {isSelected ? <SunIcon /> : <MoonIcon />}
         </div>
       </Component>
     </div>
