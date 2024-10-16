@@ -4,6 +4,7 @@ import { indicatorsResultCategories } from "../../constants/sdgPages";
 import { useEffect, useMemo, useState } from "react";
 import { SimpleIndicator, SpecialIndicator } from "../../types/SDG_Indicators";
 import { result } from "lodash";
+import { getIndicatorSectionsSum } from "../../utils/indicatorUtils";
 
 interface ResultsSectionProps {
   loading: boolean;
@@ -94,12 +95,12 @@ const ResultsSection = ({ loading, result }: ResultsSectionProps) => {
         if (indicator.type === "simple" && indicator.score !== null) {
           if (
             indicatorsResultCategories.categoryA.includes(indicator.label) &&
-            indicator.score <= 2.25
+            getIndicatorSectionsSum(indicator) <= 2.25
           ) {
             updateState(indicator);
           } else if (
             indicatorsResultCategories.categoryB.includes(indicator.label) &&
-            indicator.score <= 2.0
+            getIndicatorSectionsSum(indicator) <= 2.0
           ) {
             updateState(indicator);
           }

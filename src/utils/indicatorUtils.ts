@@ -107,3 +107,14 @@ const calcPinkIndicator = (indicator: SpecialIndicator): number => {
 
   return result;
 };
+
+export const getIndicatorSectionsSum = (indicator: SimpleIndicator): number => {
+  return indicator.sections.reduce((acc, section) => {
+    if (section.value === null) {
+      throw new Error(
+        `getIndicatorSectionsSum: Section: ${section.inputName} value is null`
+      );
+    }
+    return acc + section.value;
+  }, 0);
+};
