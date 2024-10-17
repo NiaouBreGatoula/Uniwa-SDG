@@ -7,7 +7,7 @@ import { Section } from "../../types/SDG_Sections";
 import { SDG } from "../../types/SDG_Types";
 
 interface MyCardProps {
-  cardRef: React.RefObject<HTMLDivElement>;
+  cardRef: React.RefObject<HTMLDivElement>; 
   position: { x: number; y: number };
   dragging: boolean;
   isDarkMode: boolean;
@@ -15,7 +15,9 @@ interface MyCardProps {
   currentSDGPage: number;
   sdgData: SDG[];
   handleMouseDown: (event: React.MouseEvent) => void;
+  handleResizeMouseDown: (e: React.MouseEvent) => void;
   Line: string;
+  Resize: string;
   setIsDarkMode: (value: boolean) => void;
   updateIndicatorSection: (
     indicatorIndex: number,
@@ -26,6 +28,7 @@ interface MyCardProps {
   calculateScore: () => void;
   loading: boolean;
   language: string;
+  size: { width: number };
 }
 
 const MyCard = ({
@@ -37,18 +40,21 @@ const MyCard = ({
   currentSDGPage,
   sdgData,
   handleMouseDown,
+  handleResizeMouseDown,
   Line,
+  Resize,
   setIsDarkMode,
   handlePageChange,
   calculateScore,
   loading,
   language,
+  size,
 }: MyCardProps) => {
   return (
     <div
       ref={cardRef}
       style={{
-        width: 500, // Modify Card's Width from here
+        width: size.width, // Modify Card's Width from here
         position: "absolute", // Χρησιμοποιούμε absolute για ελεύθερη μετακίνηση
         left: `${position.x}px`, // Θέση x
         top: `${position.y}px`, // Θέση y
@@ -58,8 +64,8 @@ const MyCard = ({
       className="z-20"
     >
       <Card
-        draggable="true"
-        className={`flex flex-col justify-between w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl max-h-[80vh] p-4 sm:p-6 md:p-8 shadow-2xl rounded-lg mt-8 mb-8 relative overflow-hidden ${
+      //  draggable="true"
+        className={`flex flex-col justify-between w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-auto max-h-[70vh] p-4 sm:p-6 md:p-8 shadow-2xl rounded-lg mt-8 mb-8 relative overflow-hidden ${
           isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         } select-none ${
           indicators.every((indicator) =>
@@ -71,10 +77,7 @@ const MyCard = ({
             : ""
         }`}
       >
-        <div
-          className="absolute top-2 right-2 cursor-move select-none"
-          onMouseDown={handleMouseDown}
-        >
+        <div className="absolute top-2 right-2 cursor-move select-none" onMouseDown={handleMouseDown}>
           <img
             src={Line}
             alt="Drag Icon"
@@ -83,6 +86,24 @@ const MyCard = ({
           />
         </div>
 
+        <div
+              onMouseDown={handleResizeMouseDown}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                cursor: "ew-resize",
+                padding: "10px",
+              }}
+            >
+              <img
+                src={Resize} 
+                alt="Resize Handle"
+                style={{ width: "20px", height: "20px" }} 
+              />
+            </div>
+
+
         <div className="absolute top-2 left-2 select-none">
           <ThemeSwitch
             checked={isDarkMode}
@@ -90,18 +111,14 @@ const MyCard = ({
           />
         </div>
 
-        {/* Here is the Card's Title */}
         <h2 className="text-2xl font-extrabold text-center mb-8 tracking-wide">
           {sdgData[currentSDGPage - 1].label}
         </h2>
 
-        {/* Here is the Card's Content */}
         <ScrollShadow
           size={100}
           className="w-full h-[400px] mb-4 overflow-y-scroll scrollbar-hide"
         >
-          {/* Here we are the SDG Indicators. Inside the Indicator Component the SDG
-          Section Components are been rendered. */}
 
           {sdgData[currentSDGPage - 1].indicators.map((indicator) => (
             <div
@@ -112,7 +129,6 @@ const MyCard = ({
             </div>
           ))}
         </ScrollShadow>
-        {/* Here we are using the Pagination Component from NextUI to navigate through the SDGs. */}
         <CardPagination
           calculateScore={calculateScore}
           currentSDGPage={currentSDGPage}

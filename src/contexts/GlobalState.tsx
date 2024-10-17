@@ -21,7 +21,7 @@ interface GlobalStateProviderProps {
 }
 
 const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
-  const testingMode = true;
+  const testingMode = false;
 
   const [appState, setAppState] = useState<AppState>(() => {
     const initialAppState = new Map<

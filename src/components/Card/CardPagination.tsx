@@ -47,7 +47,6 @@ const CardPagination = ({
           <>
             <span className="font-bold text-sm text-gray-700">Handmade</span> by
             Uniwa students with <div className="inline-block w-[2px]" />
-            {/* I changed the color of the SVG Heart Icon by modifying the fill attribute in the love.svg file. */}
             <img
               src={HeartIcon}
               alt="Heart Icon"
@@ -58,7 +57,6 @@ const CardPagination = ({
           <>
             <span className="font-bold text-sm text-gray-700">Χειροποίητο</span>{" "}
             από φοιτητές Uniwa με{" "}
-            {/* I changed the color of the SVG Heart Icon by modifying the fill attribute in the love.svg file. */}
             <img
               src={HeartIcon}
               alt="Heart Icon"

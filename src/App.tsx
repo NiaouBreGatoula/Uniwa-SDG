@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useDisclosure, User, Link } from "@nextui-org/react";
 import videoBg from "./assets/video.mp4";
 import Line from "../src/assets/line.svg";
+import Resize from  "../src/assets/resize.svg";
 import type { SDG } from "./types/SDG_Types";
 import MyHeader from "./components/Navbar/MyHeader";
 import { allSDGs } from "./constants/sdgPages";
@@ -30,10 +31,12 @@ const App = () => {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const [cardStartPos, setCardStartPos] = useState({ x: 0, y: 0 });
   const [language, setLanguage] = useState("en");
+  const [resizing, setResizing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [size, setSize] = useState({ width: 400 });
 
   const { appState, testingMode } = useGlobalState();
 
@@ -158,23 +161,48 @@ const App = () => {
   }, [dragging]);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' && currentSDGPage < allSDGs.length) {
+        setCurrentSDGPage((prev) => prev + 1);
+      }
+      if (e.key === 'ArrowLeft' && currentSDGPage > 1) {
+        setCurrentSDGPage((prev) => prev - 1);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    //remove listener after calling it again
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+  }, [currentSDGPage, allSDGs.length]);
+  
+
+  useEffect(() => {
     if (cardRef.current && leftPanelRef.current) {
       const cardWidth = cardRef.current.offsetWidth;
       const cardHeight = cardRef.current.offsetHeight;
       const panelWidth = leftPanelRef.current.offsetWidth;
       const panelHeight = leftPanelRef.current.offsetHeight;
-
-      const headerHeight = 100;
-      const minY = headerHeight;
+  
+      const headerHeight = 100; 
+      const minY = headerHeight; 
       const maxY = panelHeight - cardHeight;
       const centerX = (panelWidth - cardWidth) / 2;
-      const centerY = Math.max(
-        minY,
-        Math.min((panelHeight - cardHeight) / 2, maxY)
-      );
+      const centerY = Math.max(minY, Math.min((panelHeight - cardHeight) / 2, maxY));
       setPosition({ x: centerX, y: centerY });
     }
   }, []);
+  
+
+  useEffect(() => {
+    document.addEventListener("mousemove", handleResizeMouseMove);
+    document.addEventListener("mouseup", handleResizeMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleResizeMouseMove);
+      document.removeEventListener("mouseup", handleResizeMouseUp);
+    };
+  }, [resizing]);
+
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true);
@@ -182,23 +210,20 @@ const App = () => {
     setCardStartPos({ x: position.x, y: position.y });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+   const handleMouseMove = (e: MouseEvent) => {
     if (dragging) {
       const deltaX = e.clientX - dragStartPos.x;
       const deltaY = e.clientY - dragStartPos.y;
-
+  
       if (cardRef.current && leftPanelRef.current) {
         const cardWidth = cardRef.current.offsetWidth;
         const cardHeight = cardRef.current.offsetHeight;
         const panelWidth = leftPanelRef.current.offsetWidth;
         const panelHeight = leftPanelRef.current.offsetHeight;
-        const headerHeight = 100;
-        const minY = headerHeight;
-        const maxY = panelHeight - cardHeight;
-        const newX = Math.max(
-          0,
-          Math.min(cardStartPos.x + deltaX, panelWidth - cardWidth)
-        );
+        const headerHeight = 100; 
+        const minY = headerHeight; 
+        const maxY = panelHeight - cardHeight; 
+        const newX = Math.max(0,Math.min(cardStartPos.x + deltaX, panelWidth - cardWidth));
         const newY = Math.max(minY, Math.min(cardStartPos.y + deltaY, maxY));
         setPosition({ x: newX, y: newY });
       }
@@ -208,6 +233,24 @@ const App = () => {
   const handleMouseUp = () => {
     setDragging(false);
   };
+
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setResizing(true);
+  };
+
+  const handleResizeMouseMove = (e: MouseEvent) => {
+    if (resizing && cardRef.current && leftPanelRef.current) {
+      const newWidth = Math.max(200, Math.min(e.clientX - cardRef.current.offsetLeft, leftPanelRef.current.offsetWidth - cardRef.current.offsetLeft));
+      setSize((prevSize) => ({ ...prevSize, width: newWidth })); // Update only the width
+    }
+  };
+
+  const handleResizeMouseUp = () => {
+    setResizing(false);
+  };
+
+  
 
   return (
     <div className="relative flex min-h-screen">
@@ -231,11 +274,13 @@ const App = () => {
 
         <MyCard
           Line={Line}
+          Resize={Resize}
           calculateScore={calculateScore}
           cardRef={cardRef}
           currentSDGPage={currentSDGPage}
           dragging={dragging}
           handleMouseDown={handleMouseDown}
+          handleResizeMouseDown = {handleResizeMouseDown}
           handlePageChange={handlePageChange}
           indicators={indicators}
           isDarkMode={isDarkMode}
@@ -245,6 +290,7 @@ const App = () => {
           sdgData={allSDGs}
           setIsDarkMode={setIsDarkMode}
           updateIndicatorSection={updateIndicatorSection}
+          size={size}
         />
       </div>
 
