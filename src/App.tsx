@@ -9,6 +9,7 @@ import { allSDGs } from "./constants/sdgPages";
 import MyCard from "./components/Card/MyCard";
 import { calcFinalSDGScore } from "./utils/sdgCalculationUtils";
 import useGlobalState from "./contexts/useGlobalState";
+import TestModeCard from "./components/Card/TestModeCard";
 import {
   IndicatorType,
   SimpleIndicator,
@@ -293,8 +294,11 @@ const App = () => {
           size={size}
         />
       </div>
+      
 
       <ResultsSection loading={loading} result={result} />
+      {testingMode && <TestModeCard />} 
+
 
       <div className="absolute bottom-5 right-5 flex flex-col space-y-4 z-20 select-none">
         <div className="opacity-20 hover:opacity-100 transition-opacity duration-300 select-none">
@@ -337,13 +341,7 @@ const App = () => {
               src: "https://i.postimg.cc/dQj499jp/2024-10-03-14-55-31-ONEpiece-Google-Search.png",
             }}
           />
-        </div>
-
-        {testingMode && (
-          <div className="fixed bottom-3 left-2 p-4 rounded-lg bg-red-500 text-white drop-shadow-lg text-4xl">
-            Test Mode
-          </div>
-        )}
+        </div>    
       </div>
     </div>
   );

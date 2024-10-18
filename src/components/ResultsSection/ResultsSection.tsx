@@ -1,4 +1,4 @@
-import { CircularProgress } from "@nextui-org/react";
+import {ScrollShadow, CircularProgress } from "@nextui-org/react";
 import useGlobalState from "../../contexts/useGlobalState";
 import { indicatorsResultCategories } from "../../constants/sdgPages";
 import { useEffect, useMemo, useState } from "react";
@@ -140,47 +140,47 @@ const ResultsSection = ({ loading, result }: ResultsSectionProps) => {
           </section>
 
           <div className="w-full h-2 bg-slate-50 my-4" />
-
-          <section className="overflow-auto mt-2 mb-4 h-1/2 p-2 ">
-            {indicatorMessages !== null ? (
-              <div className="flex flex-col gap-4">
-                {indicatorMessages.map((indicator, index) => (
-                  <div
-                    className="text-white text-xl select-text "
-                    key={`${indicator.indicatorLabel}-${index}`}
-                  >
-                    <div className="flex justify-between gap-6">
-                      <span
-                        className="font-semibold"
-                        style={{
-                          color: indicator.indicatorColor,
-                          textShadow:
-                            indicator.indicatorColor === "green"
-                              ? "0.5px 0.5px 0.5px white"
-                              : "0.5px 0.5px 0.5px black",
-                        }}
-                      >
-                        {`${indicator.indicatorLabel} (${indicator.indicatorValue}):`}
-                      </span>
-                      <span> {`${indicator.message}`}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              "something went wrong"
-            )}
-          </section>
-
-          <section className="flex flex-col justify-center items-center text-white font-semibold text-2xl mt-4">
-            <p>
-              {indicatorMessages.length} out of {onlyIndicators.length}
-            </p>
-            <p>Can be Improved</p>
-          </section>
-        </article>
-      ) : null}
-    </div>
+            <ScrollShadow hideScrollBar className="w-full h-[50vh]">
+                  <section className="overflow-auto mt-2 mb-4 p-2">
+                    {indicatorMessages !== null ? (
+                      <div className="flex flex-col gap-4">
+                        {indicatorMessages.map((indicator, index) => (
+                          <div
+                            className="text-white text-xl select-text"
+                            key={`${indicator.indicatorLabel}-${index}`}
+                          >
+                            <div className="flex justify-between gap-6">
+                              <span
+                                className="font-semibold"
+                                style={{
+                                  color: indicator.indicatorColor,
+                                  textShadow:
+                                    indicator.indicatorColor === "green"
+                                      ? "0.5px 0.5px 0.5px white"
+                                      : "0.5px 0.5px 0.5px black",
+                                }}
+                              >
+                                {`${indicator.indicatorLabel} (${indicator.indicatorValue}):`}
+                              </span>
+                              <span>{`${indicator.message}`}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "something went wrong"
+                    )}
+                  </section>
+                </ScrollShadow>
+      <section className="flex flex-col justify-center items-center text-white font-semibold text-2xl mt-4">
+        <p>
+          {indicatorMessages.length} out of {onlyIndicators.length}
+        </p>
+        <p>Can be Improved</p>
+      </section>
+    </article>
+  ) : null}
+</div>
   );
 };
 
