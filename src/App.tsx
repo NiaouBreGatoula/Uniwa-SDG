@@ -334,7 +334,7 @@ const App = () => {
                 isExternal
                 className="font-bold text-white select-none"
               >
-                Evangelia D.
+                Lilian D.
               </Link>
             }
             avatarProps={{

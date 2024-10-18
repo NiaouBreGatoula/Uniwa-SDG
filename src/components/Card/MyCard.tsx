@@ -63,8 +63,8 @@ const MyCard = ({
       }}
       className="z-20"
     >
-      <Card
-      //  draggable="true"
+     <Card
+        // draggable="true"
         className={`flex flex-col justify-between w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-auto max-h-[70vh] p-4 sm:p-6 md:p-8 shadow-2xl rounded-lg mt-8 mb-8 relative overflow-hidden ${
           isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         } select-none ${
@@ -87,22 +87,21 @@ const MyCard = ({
         </div>
 
         <div
-              onMouseDown={handleResizeMouseDown}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                cursor: "ew-resize",
-                padding: "10px",
-              }}
-            >
-              <img
-                src={Resize} 
-                alt="Resize Handle"
-                style={{ width: "20px", height: "20px" }} 
-              />
-            </div>
-
+          onMouseDown={handleResizeMouseDown}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            cursor: "ew-resize",
+            padding: "10px",
+          }}
+        >
+          <img
+            src={Resize} 
+            alt="Resize Handle"
+            style={{ width: "20px", height: "20px" }} 
+          />
+        </div>
 
         <div className="absolute top-2 left-2 select-none">
           <ThemeSwitch
@@ -119,16 +118,18 @@ const MyCard = ({
           size={100}
           className="w-full h-[400px] mb-4 overflow-y-scroll scrollbar-hide"
         >
-
           {sdgData[currentSDGPage - 1].indicators.map((indicator) => (
             <div
               key={`${indicator.label}-${currentSDGPage}`}
-              className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md"
+              className={`mb-6 p-4 rounded-lg shadow-md ${
+                isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"
+              }`}
             >
               <Indicator indicator={indicator} />
             </div>
           ))}
         </ScrollShadow>
+
         <CardPagination
           calculateScore={calculateScore}
           currentSDGPage={currentSDGPage}
