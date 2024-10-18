@@ -3,7 +3,6 @@ import useGlobalState from "../../contexts/useGlobalState";
 import { indicatorsResultCategories } from "../../constants/sdgPages";
 import { useEffect, useMemo, useState } from "react";
 import { SimpleIndicator, SpecialIndicator } from "../../types/SDG_Indicators";
-import { result } from "lodash";
 import { getIndicatorSectionsSum } from "../../utils/indicatorUtils";
 
 interface ResultsSectionProps {

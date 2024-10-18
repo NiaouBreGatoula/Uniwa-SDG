@@ -3,14 +3,13 @@ import { SimpleIndicator, SpecialIndicator } from "./SDG_Indicators";
 export interface GlobalState {
   appState: AppState;
   testingMode: boolean;
-  // targetedYear: YearType;
-  // setTargetedYear: React.Dispatch<React.SetStateAction<YearType>>;
   handleUserInputSpecialIndicator: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
   handleUserInputSimpleIndicator: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
+  toggleTestMode: () => void;  // Προσθήκη του toggleTestMode
 }
 
 export type AppState = Map<string, SimpleIndicator | SpecialIndicator>;

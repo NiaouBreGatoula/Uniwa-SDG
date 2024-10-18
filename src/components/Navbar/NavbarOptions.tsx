@@ -15,6 +15,9 @@ import {
 import LanguageIcon from "../../assets/lang.svg";
 import AboutUs from "../../assets/about.svg";
 import RestartIcon from "../../assets/restart.svg";
+import TestIcon from "../../assets/test.svg";
+import { GlobalStateContext } from '../../contexts/GlobalState';
+import { useContext } from 'react';  // Ensure useContext is imported
 
 interface NavbarOptionsProps {
   handleRestart: () => void;
@@ -25,6 +28,7 @@ interface NavbarOptionsProps {
   handleLanguageChange: (key: string) => void;
 }
 
+
 const NavbarOptions = ({
   handleRestart,
   language,
@@ -33,6 +37,15 @@ const NavbarOptions = ({
   onOpenChange,
   handleLanguageChange,
 }: NavbarOptionsProps) => {
+  const context = useContext(GlobalStateContext);
+
+  // Έλεγχος για undefined πριν τη χρήση των μεταβλητών
+  if (!context) {
+    throw new Error("GlobalStateContext is undefined. Make sure you are wrapping your components with GlobalStateProvider.");
+  }
+
+  const { testingMode, toggleTestMode } = context;
+
   return (
     <nav className="select-none">
       <ul className="flex space-x-4 select-none">
@@ -193,6 +206,26 @@ const NavbarOptions = ({
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+              <Button
+                color={testingMode ? "success" : "primary"} 
+                variant="shadow"
+                radius="sm"
+                onPress={toggleTestMode} 
+                className="select-none"
+              >
+                <img
+                  src={TestIcon}
+                  alt="Test Icon"
+                  className="inline-block mr-2 h-4 w-4 select-none"
+                />
+                {testingMode
+                  ? language === "en"
+                    ? "Test Mode ON"
+                    : "Test Mode ΕΝΕΡΓΟ"
+                  : language === "en"
+                  ? "Test Mode OFF"
+                  : "Test Mode ΑΝΕΝΕΡΓΟ"}
+              </Button>
         </ButtonGroup>
       </ul>
     </nav>

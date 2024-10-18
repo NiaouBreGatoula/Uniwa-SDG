@@ -3,6 +3,7 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useEffect,
   //   Dispatch,
   //   SetStateAction,
 } from "react";
@@ -21,13 +22,11 @@ interface GlobalStateProviderProps {
 }
 
 const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
-  const testingMode = false;
-
-  const [appState, setAppState] = useState<AppState>(() => {
-    const initialAppState = new Map<
-      string,
-      SimpleIndicator | SpecialIndicator
-    >();
+  const [testingMode, setTestingMode] = useState(false);
+  //console.log("Initial testingMode:", testingMode);
+  const [appState, setAppState] = useState<AppState>(new Map());
+  useEffect(() => {
+    const initialAppState = new Map<string, SimpleIndicator | SpecialIndicator>();
     allSDGs.forEach((sdg) => {
       if (testingMode) {
         sdg.indicatorsWithValues.forEach((indicator) => {
@@ -43,8 +42,20 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         });
       }
     });
-    return initialAppState;
-  });
+    //console.log("AppState updated with testingMode:", testingMode);
+    setAppState(initialAppState);
+  }, [testingMode]); 
+
+
+  const toggleTestMode = () => {
+   // console.log("Toggling Test Mode. Current:", testingMode);
+    setTestingMode((prev) => {
+      const newTestingMode = !prev;
+   //   console.log("New testingMode:", newTestingMode);
+      return newTestingMode;
+    });
+  };
+
 
   // console.log("Rendered GlobalStateProvider");
 
@@ -241,7 +252,8 @@ const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         appState,
         handleUserInputSpecialIndicator,
         handleUserInputSimpleIndicator,
-        testingMode,
+        testingMode,      
+        toggleTestMode,   
       }}
     >
       {children}
