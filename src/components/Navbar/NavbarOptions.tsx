@@ -14,6 +14,8 @@ import {
 
 import LanguageIcon from "../../assets/lang.svg";
 import AboutUs from "../../assets/about.svg";
+import EnglishFlag from "../../assets/english.svg";
+import GreekFlag from "../../assets/greek.svg";
 import RestartIcon from "../../assets/restart.svg";
 import TestIcon from "../../assets/test.svg";
 import { GlobalStateContext } from '../../contexts/GlobalState';
@@ -186,7 +188,7 @@ const NavbarOptions = ({
                 className="select-none"
               >
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Greece.svg/32px-Flag_of_Greece.svg.png"
+                  src={GreekFlag}
                   alt="Greek Flag"
                   className="inline-block mr-2 h-4 w-6 select-none"
                 />
@@ -198,7 +200,7 @@ const NavbarOptions = ({
                 className="select-none"
               >
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/32px-Flag_of_the_United_States.svg.png"
+                  src={EnglishFlag}
                   alt="English Flag"
                   className="inline-block mr-2 h-4 w-6 select-none"
                 />

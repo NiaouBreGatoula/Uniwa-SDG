@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
     "@nextui-org/react": "^2.4.8",
     "framer-motion": "^11.9.0",
     "lodash": "^4.17.21",

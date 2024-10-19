@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import Preloader from "./components/Preloader/Preloader"; 
 import { useDisclosure, User, Link } from "@nextui-org/react";
 import videoBg from "./assets/video.mp4";
 import Line from "../src/assets/line.svg";
-import Resize from  "../src/assets/resize.svg";
+import Resize from "../src/assets/resize.svg";
 import type { SDG } from "./types/SDG_Types";
 import MyHeader from "./components/Navbar/MyHeader";
 import { allSDGs } from "./constants/sdgPages";
@@ -10,11 +11,7 @@ import MyCard from "./components/Card/MyCard";
 import { calcFinalSDGScore } from "./utils/sdgCalculationUtils";
 import useGlobalState from "./contexts/useGlobalState";
 import TestModeCard from "./components/Card/TestModeCard";
-import {
-  IndicatorType,
-  SimpleIndicator,
-  SpecialIndicator,
-} from "./types/SDG_Indicators";
+import { IndicatorType,SimpleIndicator,SpecialIndicator,} from "./types/SDG_Indicators";
 import { Section } from "./types/SDG_Sections";
 import ResultsSection from "./components/ResultsSection/ResultsSection";
 
@@ -26,7 +23,7 @@ const App = () => {
     allSDGs[0].indicators
   );
   const [result, setResult] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false); 
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
@@ -38,8 +35,24 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [size, setSize] = useState({ width: 400 });
+  const [isPreloaderVisible, setIsPreloaderVisible] = useState<boolean>(true);
+
 
   const { appState, testingMode } = useGlobalState();
+ 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPreloaderVisible(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 20); 
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     setIndicators(sdgDataState[currentSDGPage - 1].indicators);
@@ -108,7 +121,6 @@ const App = () => {
         const totalScore = calcFinalSDGScore(appState);
         setResult(totalScore);
       } catch (error) {
-        // Add Toast Notification Here
         console.error("Error while calculating the Total SDG Score: ", error);
       } finally {
         setLoading(false);
@@ -178,22 +190,21 @@ const App = () => {
   }, [currentSDGPage, allSDGs.length]);
   
 
+  // Center the card after loading is complete and on initial render
   useEffect(() => {
     if (cardRef.current && leftPanelRef.current) {
       const cardWidth = cardRef.current.offsetWidth;
       const cardHeight = cardRef.current.offsetHeight;
       const panelWidth = leftPanelRef.current.offsetWidth;
       const panelHeight = leftPanelRef.current.offsetHeight;
-  
-      const headerHeight = 100; 
-      const minY = headerHeight; 
+      const headerHeight = 100;
+      const minY = headerHeight;
       const maxY = panelHeight - cardHeight;
       const centerX = (panelWidth - cardWidth) / 2;
       const centerY = Math.max(minY, Math.min((panelHeight - cardHeight) / 2, maxY));
       setPosition({ x: centerX, y: centerY });
     }
-  }, []);
-  
+  }, [isPreloaderVisible, cardRef, leftPanelRef]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleResizeMouseMove);
@@ -255,6 +266,9 @@ const App = () => {
 
   return (
     <div className="relative flex min-h-screen">
+      <div className={`preloader-overlay ${isPreloaderVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity duration-1000 ease-in-out fixed top-0 left-0 w-full h-full z-50`}>
+        {isPreloaderVisible && <Preloader />}
+      </div>
       <video
         src={videoBg}
         autoPlay
@@ -343,6 +357,7 @@ const App = () => {
           />
         </div>    
       </div>
+    
     </div>
   );
 };
