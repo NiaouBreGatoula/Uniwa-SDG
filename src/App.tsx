@@ -190,7 +190,6 @@ const App = () => {
   }, [currentSDGPage, allSDGs.length]);
   
 
-  // Center the card after loading is complete and on initial render
   useEffect(() => {
     if (cardRef.current && leftPanelRef.current) {
       const cardWidth = cardRef.current.offsetWidth;
