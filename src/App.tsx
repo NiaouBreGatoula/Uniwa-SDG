@@ -43,7 +43,7 @@ const App = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsPreloaderVisible(false);
-    }, 4000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
